@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"net/url"
 	"os"
 	"path"
 	"path/filepath"
@@ -262,7 +263,11 @@ func doubanUpdateExt(items []*douban) error {
 		}
 		for k, v := range items {
 			if f.Name() == path.Base(v.SubjectCover) {
-				items[k].ExtCoverURL = path.Join(C.PublicURL, f.Name())
+				link, err := url.JoinPath(C.PublicURL, f.Name())
+				if err != nil {
+					return err
+				}
+				items[k].ExtCoverURL = link
 				hash, err := fileMD5(filepath.Join(C.SaveDir, f.Name()))
 				if err != nil {
 					return err
