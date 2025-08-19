@@ -1,0 +1,21 @@
+services:
+  dbnow:
+    image: ghcr.io/nervebing/dbnow:latest
+    container_name: dbnow
+    restart: always
+    logging:
+      driver: json-file
+      options:
+        max-size: 1m
+    network_mode: host
+    environment:
+      INITIAL_DELAY: 10s
+      INTERVAL: 3600s
+      PUBLIC_URL: http://127.0.0.1:8080/
+      DOUBAN_ID: 157489011
+      USER_AGENT: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36
+      TIMEOUT: 10s
+      SAVE_DIR: /app/douban
+      INDEX_FILE_NAME: index.json
+    volumes:
+      - ./douban:/app/douban
