@@ -211,7 +211,7 @@ func doubanSave(items []*douban) error {
 
 func doubanSaveCover(items []*douban) error {
 	for _, i := range items {
-		if err := fileDownload(C.SaveDir, i.SubjectCover); err != nil {
+		if err := fileDownload(C.SaveDir, i.SubjectLink, i.SubjectCover); err != nil {
 			return err
 		}
 	}

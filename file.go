@@ -20,8 +20,8 @@ func fileSave(content any, path string) error {
 	return os.WriteFile(path, j, 0644)
 }
 
-func fileDownload(dir string, link string) error {
-	fileName := path.Base(link)
+func fileDownload(dir string, subjectLink string, subjectCover string) error {
+	fileName := path.Base(subjectCover)
 	filePath := filepath.Join(dir, fileName)
 	if fileInfo, err := os.Stat(filePath); err == nil {
 		if fileInfo.Size() > 1024 {
@@ -32,10 +32,11 @@ func fileDownload(dir string, link string) error {
 		}
 	}
 
-	req, err := http.NewRequest(http.MethodGet, link, nil)
+	req, err := http.NewRequest(http.MethodGet, subjectCover, nil)
 	if err != nil {
 		return err
 	}
+	req.Header.Set("Referer", subjectLink)
 	req.Header.Set("User-Agent", C.UserAgent)
 	client := &http.Client{Timeout: C.Timeout}
 	resp, err := client.Do(req)
@@ -68,7 +69,7 @@ func fileDownload(dir string, link string) error {
 
 	_, err = io.Copy(file, resp.Body)
 
-	log.Printf("Downloading file from %s to %s...", link, filePath)
+	log.Printf("Downloading file from %s to %s...", subjectCover, filePath)
 
 	return err
 }
